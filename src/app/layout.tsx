@@ -9,6 +9,8 @@ import { PREFERENCE_DEFAULTS } from "@/lib/preferences/preferences-config";
 import { ThemeBootScript } from "@/scripts/theme-boot";
 import { PreferencesStoreProvider } from "@/stores/preferences/preferences-provider";
 
+import Providers from "@/providers/query-client-provider";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -35,17 +37,19 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         {/* Applies theme and layout preferences on load to avoid flicker and unnecessary server rerenders. */}
         <ThemeBootScript />
       </head>
-      <body className={`${fontVars} min-h-screen antialiased`}>
-        <PreferencesStoreProvider
-          themeMode={theme_mode}
-          themePreset={theme_preset}
-          contentLayout={content_layout}
-          navbarStyle={navbar_style}
-          font={font}
-        >
-          {children}
-          <Toaster />
-        </PreferencesStoreProvider>
+      <body className={`${fontVars} min-h-screen antialiased`} suppressHydrationWarning>
+        <Providers>
+          <PreferencesStoreProvider
+            themeMode={theme_mode}
+            themePreset={theme_preset}
+            contentLayout={content_layout}
+            navbarStyle={navbar_style}
+            font={font}
+          >
+            {children}
+            <Toaster />
+          </PreferencesStoreProvider>
+        </Providers>
       </body>
     </html>
   );
