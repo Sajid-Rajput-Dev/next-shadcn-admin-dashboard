@@ -38,3 +38,6 @@ next-env.d.ts
 
 # local
 /reference_project_ui_pictures
+
+# local MCP secrets
+.vscode/mcp.json
