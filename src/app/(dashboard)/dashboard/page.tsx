@@ -1,10 +1,15 @@
-import { createClient } from "@/lib/supabase/server";
-import { MarketToggle } from "@/components/layout/market-toggle";
-import { PortfolioSummary as KpiCards } from "./_components/portfolio-summary";
-import { LatestAlertCard } from "./_components/latest-alert-card";
 import { StockHeatmap } from "@/components/charts/stock-heatmap";
-import { RecentTrades } from "./_components/recent-trades";
-import { QuickActions } from "./_components/quick-actions";
+import { MarketToggle } from "@/components/layout/market-toggle";
+import { createClient } from "@/lib/supabase/server";
+
+import { AlertsSummary } from "./_components/alerts-summary";
+import { CongressActivityChart } from "./_components/congress-activity-chart";
+import { EarningsPreview } from "./_components/earnings-preview";
+import { MarketMoversMini } from "./_components/market-movers-mini";
+import { MarketOverviewStrip } from "./_components/market-overview-strip";
+import { NewsTicker } from "./_components/news-ticker";
+import { QuickNav } from "./_components/quick-nav";
+import { WhaleTrackerMini } from "./_components/whale-tracker-mini";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -13,41 +18,66 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
 
   return (
-    <div className="flex flex-col gap-6 p-4 md:p-8">
-      {/* Welcome Header & Market Toggle */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="flex flex-col gap-5 p-4 md:p-6">
+      {/* ── Header ──────────────────────────────────────── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-          <p className="text-muted-foreground">
-            Welcome back, {user?.email?.split("@")[0] || "Trader"}. Here's your market intelligence briefing.
+          <h2 className="text-2xl font-bold tracking-tight">Market Intelligence</h2>
+          <p className="text-sm text-muted-foreground">
+            Welcome back, <span className="text-white font-medium">{user?.email?.split("@")[0] || "Trader"}</span>.
+            Here&apos;s your full briefing.
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <MarketToggle />
+        <MarketToggle />
+      </div>
+
+      {/* ── Row 1: KPI Strip ────────────────────────────── */}
+      <MarketOverviewStrip />
+
+      {/* ── Row 2: Movers + Alerts ──────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-7 gap-5">
+        <div className="lg:col-span-4">
+          <MarketMoversMini />
+        </div>
+        <div className="lg:col-span-3">
+          <AlertsSummary />
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <KpiCards />
-
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-6">
-        
-        {/* Left Column (Alerts + Heatmap) */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-4 flex flex-col gap-6">
-          <LatestAlertCard />
-          <div className="flex flex-col gap-2">
-             <h3 className="text-lg font-semibold">Market Heatmap</h3>
-             <StockHeatmap />
-          </div>
+      {/* ── Row 3: Heatmap + Congress ───────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-7 gap-5">
+        <div className="lg:col-span-4 flex flex-col gap-2">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-0.5">Sector Heatmap</p>
+          <StockHeatmap />
         </div>
-
-        {/* Right Column (Trades + Actions) */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col gap-6">
-          <RecentTrades />
-          <QuickActions />
+        <div className="lg:col-span-3">
+          <CongressActivityChart />
         </div>
       </div>
+
+      {/* ── Row 4: News + Whale ─────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-7 gap-5">
+        <div className="lg:col-span-4">
+          <NewsTicker />
+        </div>
+        <div className="lg:col-span-3">
+          <WhaleTrackerMini />
+        </div>
+      </div>
+
+      {/* ── Row 5: Earnings + Quick Nav ─────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-7 gap-5">
+        <div className="lg:col-span-4">
+          <EarningsPreview />
+        </div>
+        <div className="lg:col-span-3">
+          {/* Placeholder — fills remaining height */}
+          <div className="h-full" />
+        </div>
+      </div>
+
+      {/* ── Row 6: Quick Nav ────────────────────────────── */}
+      <QuickNav />
     </div>
   );
 }
