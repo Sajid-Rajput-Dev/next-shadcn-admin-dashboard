@@ -4,31 +4,49 @@ export const API_URLS = {
     FMP_V4: "https://financialmodelingprep.com/api/v4",
     FMP_STABLE: "https://financialmodelingprep.com/stable",
     COINGECKO: "https://api.coingecko.com/api/v3",
+    /** Deprecated (v1) REST API — still works with Custom Alerts API key */
     WHALE_ALERT: "https://api.whale-alert.io/v1",
+    /** WebSocket endpoint for Custom Alerts API plan */
+    WHALE_ALERT_WS: "wss://leviathan.whale-alert.io/ws",
 } as const;
 
 /** Cache TTLs in seconds for API route responses */
 export const CACHE_TTL = {
-    CONGRESS_TRADES: 15 * 60,  // 15 minutes
-    CONGRESS_ALERTS: 5 * 60,   // 5 minutes
-    WHALE_TRANSACTIONS: 2 * 60, // 2 minutes
-    CRYPTO_PRICES: 60,          // 1 minute
-    STOCK_QUOTES: 60,           // 1 minute
-    HEATMAP: 5 * 60,           // 5 minutes
-    POLITICIANS: 30 * 60,       // 30 minutes
+    CONGRESS_TRADES: 15 * 60,    // 15 minutes
+    CONGRESS_ALERTS: 5 * 60,     // 5 minutes
+    WHALE_TRANSACTIONS: 60,       // 1 minute (reduced with paid plan)
+    CRYPTO_PRICES: 60,            // 1 minute
+    STOCK_QUOTES: 60,             // 1 minute
+    HEATMAP: 5 * 60,             // 5 minutes
+    POLITICIANS: 30 * 60,         // 30 minutes
+    MARKET_MOVERS: 3 * 60,       // 3 minutes — gainers/losers/actives
+    NEWS: 5 * 60,                // 5 minutes
+    STOCK_HISTORY: 10 * 60,      // 10 minutes
+    INSIDER_TRADES: 10 * 60,     // 10 minutes
+    EARNINGS_CALENDAR: 15 * 60,  // 15 minutes
+    COMPANY_PROFILE: 60 * 60,    // 1 hour
 } as const;
 
 /** TanStack Query stale times in milliseconds */
 export const STALE_TIME = {
     CONGRESS_TRADES: 15 * 60 * 1000,
-    WHALE_TRANSACTIONS: 2 * 60 * 1000,
+    WHALE_TRANSACTIONS: 60 * 1000,       // 1 minute
     STOCK_QUOTES: 60 * 1000,
     CRYPTO_PRICES: 60 * 1000,
     ALERTS_FEED: 30 * 1000,
     HEATMAP: 5 * 60 * 1000,
     WATCHLIST: 0, // Always refetch
     POLITICIANS: 30 * 60 * 1000,
+    MARKET_MOVERS: 2 * 60 * 1000,        // 2 minutes
+    NEWS: 5 * 60 * 1000,                 // 5 minutes
+    STOCK_HISTORY: 10 * 60 * 1000,       // 10 minutes
+    INSIDER_TRADES: 10 * 60 * 1000,      // 10 minutes
+    EARNINGS_CALENDAR: 15 * 60 * 1000,   // 15 minutes
+    COMPANY_PROFILE: 60 * 60 * 1000,     // 1 hour
 } as const;
+
+/** Minimum whale alert value — Custom Alerts API plan allows $100K min */
+export const WHALE_MIN_VALUE_USD = 100_000;
 
 /** Severity thresholds */
 export const CONGRESS_SEVERITY_THRESHOLDS = {

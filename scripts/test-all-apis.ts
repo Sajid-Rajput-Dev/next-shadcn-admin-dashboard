@@ -103,39 +103,53 @@ async function testExternalAPIs() {
     const CG_KEY = process.env.COINGECKO_API_KEY;
     const WA_KEY = process.env.WHALE_ALERT_API_KEY!;
 
-    // ── FMP: Senate Trading ──
+    // ── FMP: Senate Trading (Stable) ──
     await testApi(
-        "FMP - Senate Trading (v4)",
+        "FMP - Senate Trading (stable)",
         "EXTERNAL",
-        `https://financialmodelingprep.com/api/v4/senate-trading?page=0&apikey=${FMP_KEY}`,
+        `https://financialmodelingprep.com/stable/senate-latest?page=0&limit=25&apikey=${FMP_KEY}`,
     );
 
-    // ── FMP: House Disclosures ──
+    // ── FMP: House Disclosures (Stable) ──
     await testApi(
-        "FMP - House Disclosures (v4)",
+        "FMP - House Disclosures (stable)",
         "EXTERNAL",
-        `https://financialmodelingprep.com/api/v4/senate-disclosure?page=0&apikey=${FMP_KEY}`,
+        `https://financialmodelingprep.com/stable/house-latest?page=0&limit=25&apikey=${FMP_KEY}`,
     );
 
-    // ── FMP: Stock Quote ──
+    // ── FMP: Stock Quote (Stable) ──
     await testApi(
-        "FMP - Stock Quote (AAPL)",
+        "FMP - Stock Quote (stable, AAPL)",
         "EXTERNAL",
-        `https://financialmodelingprep.com/api/v3/quote/AAPL?apikey=${FMP_KEY}`,
+        `https://financialmodelingprep.com/stable/quote?symbol=AAPL&apikey=${FMP_KEY}`,
     );
 
-    // ── FMP: Sector Performance ──
+    // ── FMP: Sector Performance (Stable) ──
     await testApi(
-        "FMP - Sector Performance",
+        "FMP - Sector Performance (stable)",
         "EXTERNAL",
-        `https://financialmodelingprep.com/api/v3/sectors-performance?apikey=${FMP_KEY}`,
+        `https://financialmodelingprep.com/stable/sector-performance-snapshot?date=${new Date().toISOString().split("T")[0]}&apikey=${FMP_KEY}`,
     );
 
-    // ── FMP: Company Profile ──
+    // ── FMP: Company Profile (Stable) ──
     await testApi(
-        "FMP - Company Profile (AAPL)",
+        "FMP - Company Profile (stable, AAPL)",
         "EXTERNAL",
-        `https://financialmodelingprep.com/api/v3/profile/AAPL?apikey=${FMP_KEY}`,
+        `https://financialmodelingprep.com/stable/profile?symbol=AAPL&apikey=${FMP_KEY}`,
+    );
+
+    // ── FMP: Market Movers (Stable) ──
+    await testApi(
+        "FMP - Biggest Gainers (stable)",
+        "EXTERNAL",
+        `https://financialmodelingprep.com/stable/biggest-gainers?apikey=${FMP_KEY}`,
+    );
+
+    // ── FMP: Insider Trading Latest (Stable) ──
+    await testApi(
+        "FMP - Insider Trading Latest (stable)",
+        "EXTERNAL",
+        `https://financialmodelingprep.com/stable/insider-trading/latest?page=0&limit=10&apikey=${FMP_KEY}`,
     );
 
     // ── CoinGecko: Coins Markets ──

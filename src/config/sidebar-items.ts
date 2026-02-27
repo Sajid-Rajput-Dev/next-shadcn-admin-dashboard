@@ -1,4 +1,16 @@
-import { LayoutDashboard, Bell, FileText, Settings, LineChart, Database } from "lucide-react";
+import {
+    ActivitySquare,
+    Bell,
+    CalendarDays,
+    Database,
+    LayoutDashboard,
+    LineChart,
+    Newspaper,
+    Settings,
+    TrendingUp,
+    Users,
+    Waves,
+} from "lucide-react";
 
 export const sidebarItems = [
     {
@@ -16,14 +28,48 @@ export const sidebarItems = [
         url: "/alerts",
         icon: Bell,
     },
+    // ── Data Explorer group ──────────────────────
     {
-        title: "Data Explorer",
+        title: "Trades Explorer",
         url: "/data-explorer/trades",
         icon: Database,
     },
+    {
+        title: "Live Whales",
+        url: "/data-explorer/whales",
+        icon: Waves,
+    },
+    // ── Market Intelligence (new) ────────────────
+    {
+        title: "Market Movers",
+        url: "/market-movers",
+        icon: TrendingUp,
+    },
+    {
+        title: "News",
+        url: "/news",
+        icon: Newspaper,
+    },
+    {
+        title: "Earnings Calendar",
+        url: "/calendar",
+        icon: CalendarDays,
+    },
+    {
+        title: "Insider Trades",
+        url: "/data-explorer/insider",
+        icon: Users,
+    },
+    {
+        title: "Sector Heatmap",
+        url: "/data-explorer/heatmap",
+        icon: ActivitySquare,
+    },
+    // ────────────────────────────────────────────
     {
         title: "Settings",
         url: "/settings",
         icon: Settings,
     },
 ];
+

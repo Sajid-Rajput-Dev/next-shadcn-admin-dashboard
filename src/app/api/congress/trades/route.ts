@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 
-import { fmpClient } from "@/lib/api/fmp";
+import { fmpClient, FMPPlanError } from "@/lib/api/fmp";
+
+const PAGE_SIZE = 25; // FMP default limit
 
 export async function GET(request: Request) {
     try {
@@ -8,28 +10,33 @@ export async function GET(request: Request) {
         const page = parseInt(searchParams.get("page") || "0");
         const chamber = searchParams.get("chamber") || "both"; // senate | house | both
 
-        // FMP free plan only supports page=0
-        if (page > 0) {
-            return NextResponse.json(
-                { data: [], page, hasMore: false, note: "Pagination limited on free plan" },
-                {
-                    headers: {
-                        "Cache-Control": "public, s-maxage=900, stale-while-revalidate=1800",
-                    },
-                },
-            );
-        }
-
         let trades: any[] = [];
+        let planLimited = false;
 
         if (chamber === "senate" || chamber === "both") {
-            const senateTrades = await fmpClient.getSenateTrades(page);
-            trades = [...trades, ...senateTrades];
+            try {
+                const senateTrades = await fmpClient.getSenateTrades(page, PAGE_SIZE);
+                trades = [...trades, ...senateTrades];
+            } catch (error) {
+                if (error instanceof FMPPlanError) {
+                    planLimited = true;
+                } else {
+                    throw error;
+                }
+            }
         }
 
         if (chamber === "house" || chamber === "both") {
-            const houseTrades = await fmpClient.getHouseDisclosures(page);
-            trades = [...trades, ...houseTrades];
+            try {
+                const houseTrades = await fmpClient.getHouseDisclosures(page, PAGE_SIZE);
+                trades = [...trades, ...houseTrades];
+            } catch (error) {
+                if (error instanceof FMPPlanError) {
+                    planLimited = true;
+                } else {
+                    throw error;
+                }
+            }
         }
 
         // Sort by disclosure date descending
@@ -39,8 +46,12 @@ export async function GET(request: Request) {
                 new Date(a.disclosureDate || a.disclosure_date || "").getTime(),
         );
 
+        // hasMore is true when this request returns a full page for the selected chamber set
+        const expectedPageSize = chamber === "both" ? PAGE_SIZE * 2 : PAGE_SIZE;
+        const hasMore = !planLimited && trades.length >= expectedPageSize;
+
         return NextResponse.json(
-            { data: trades, page, hasMore: false },
+            { data: trades, page, hasMore, planLimited },
             {
                 headers: {
                     "Cache-Control": "public, s-maxage=900, stale-while-revalidate=1800",

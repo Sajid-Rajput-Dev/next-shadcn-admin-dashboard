@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { SiteHeader } from "@/components/layout/site-header";
+import { WhaleRealtimeProvider } from "@/components/shared/whale-realtime-provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import type { ReactNode } from "react";
 
@@ -13,6 +14,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           {children}
         </div>
       </SidebarInset>
+      {/* Live whale alert toasts via Supabase Realtime (postgres_changes) */}
+      <WhaleRealtimeProvider />
     </SidebarProvider>
   );
 }

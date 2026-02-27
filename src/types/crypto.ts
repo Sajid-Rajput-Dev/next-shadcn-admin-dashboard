@@ -42,6 +42,7 @@ export interface WhaleFilter {
     symbol?: string;
     minAmountUsd?: number;
     ownerType?: string;
+    transactionType?: string;
     dateFrom?: string;
     dateTo?: string;
     search?: string;

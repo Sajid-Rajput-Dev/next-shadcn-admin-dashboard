@@ -15,16 +15,12 @@ export async function GET(request: Request) {
         }
 
         // Support comma-separated symbols: AAPL,MSFT,GOOGL
+        // Single batched call — FMP accepts comma-separated list (300 calls/min on Starter plan)
         const symbolList = symbols.split(",").map((s) => s.trim().toUpperCase());
-        const quotes = await Promise.all(
-            symbolList.map((symbol) => fmpClient.getQuote(symbol)),
-        );
-
-        // Flatten: getQuote returns an array per symbol
-        const data = quotes.flat();
+        const quotes = await fmpClient.getQuote(symbolList);
 
         return NextResponse.json(
-            { data },
+            { quotes },
             {
                 headers: {
                     "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",

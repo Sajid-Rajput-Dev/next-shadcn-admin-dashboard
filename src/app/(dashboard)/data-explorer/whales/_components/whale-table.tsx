@@ -84,7 +84,7 @@ export function WhaleTable() {
                   </TableCell>
                   <TableCell>{formatCompact(tx.amount)}</TableCell>
                   <TableCell className="font-medium text-green-500">
-                    {formatUSD(tx.amount_usd)}
+                    {formatUSD(tx.amount_usd ?? 0)}
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2 text-xs">

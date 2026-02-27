@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -20,26 +20,27 @@ export function TradeFilters() {
   const debouncedTicker = useDebounce(ticker, 500);
   const debouncedPolitician = useDebounce(politician, 500);
 
+  // Skip the initial mount — only push URL updates when the user actually changes a filter.
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    // Build params purely from local state — do NOT read searchParams here so
+    // this effect doesn't depend on it and cause an infinite navigation loop.
+    const params = new URLSearchParams();
+
     if (debouncedTicker) params.set("ticker", debouncedTicker);
-    else params.delete("ticker");
-
     if (debouncedPolitician) params.set("politician", debouncedPolitician);
-    else params.delete("politician");
-
     if (party && party !== "all") params.set("party", party);
-    else params.delete("party");
-
     if (chamber && chamber !== "both") params.set("chamber", chamber);
-    else params.delete("chamber");
 
-    // Reset page on filter change
-    params.set("page", "1");
-
-    router.push(`?${params.toString()}`);
-  }, [debouncedTicker, debouncedPolitician, party, chamber, router, searchParams]);
+    // Use replace (not push) so filter changes don't pile up in browser history.
+    router.replace(`?${params.toString()}`);
+  }, [debouncedTicker, debouncedPolitician, party, chamber, router]);
 
   const clearFilters = () => {
     setTicker("");

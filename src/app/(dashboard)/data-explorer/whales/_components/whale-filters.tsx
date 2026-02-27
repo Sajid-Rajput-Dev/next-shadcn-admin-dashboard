@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -19,19 +19,25 @@ export function WhaleFilters() {
   const debouncedSymbol = useDebounce(symbol, 500);
   const debouncedMinAmount = useDebounce(minAmount, 500);
 
+  // Skip the initial mount — only push URL updates when the user actually changes a filter.
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    // Build params purely from local state — do NOT read searchParams here so
+    // this effect doesn't depend on it and cause an infinite navigation loop.
+    const params = new URLSearchParams();
+
     if (debouncedSymbol) params.set("symbol", debouncedSymbol.toUpperCase());
-    else params.delete("symbol");
-
     if (debouncedMinAmount) params.set("min_amount", debouncedMinAmount);
-    else params.delete("min_amount");
 
-    params.set("page", "1");
-
-    router.push(`?${params.toString()}`);
-  }, [debouncedSymbol, debouncedMinAmount, router, searchParams]);
+    // Use replace (not push) so filter changes don't pile up in browser history.
+    router.replace(`?${params.toString()}`);
+  }, [debouncedSymbol, debouncedMinAmount, router]);
 
   const clearFilters = () => {
     setSymbol("");

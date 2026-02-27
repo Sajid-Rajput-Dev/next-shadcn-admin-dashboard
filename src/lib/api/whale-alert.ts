@@ -1,4 +1,4 @@
-import { API_URLS } from "@/lib/utils/constants";
+import { API_URLS, WHALE_MIN_VALUE_USD } from "@/lib/utils/constants";
 
 const WA_BASE = API_URLS.WHALE_ALERT;
 
@@ -60,7 +60,7 @@ export const whaleAlertClient = {
         limit?: number;
         cursor?: string;
     }): Promise<WAResponse> {
-        const { minValueUsd = 500_000, start, cursor, limit } = options || {};
+        const { minValueUsd = WHALE_MIN_VALUE_USD, start, cursor, limit } = options || {};
         const since = start || Math.floor(Date.now() / 1000) - 3600; // default: last 1 hour
         const params = new URLSearchParams({
             api_key: getApiKey(),

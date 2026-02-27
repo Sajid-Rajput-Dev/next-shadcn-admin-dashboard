@@ -90,10 +90,14 @@ CREATE TABLE public.whale_transactions (
     blockchain TEXT NOT NULL,
     tx_hash TEXT NOT NULL,
     symbol TEXT NOT NULL,
+    transaction_type TEXT NOT NULL DEFAULT 'transfer',
     amount NUMERIC NOT NULL,
     amount_usd NUMERIC NOT NULL,
+    from_owner TEXT,
+    to_owner TEXT,
     from_owner_type TEXT,
     to_owner_type TEXT,
+    alert_text TEXT,
     timestamp TIMESTAMPTZ NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE (tx_hash, blockchain)
@@ -111,6 +115,11 @@ CREATE INDEX idx_whale_tx_timestamp ON public.whale_transactions (timestamp DESC
 CREATE INDEX idx_whale_tx_amount ON public.whale_transactions (amount_usd DESC);
 
 CREATE INDEX idx_whale_tx_blockchain ON public.whale_transactions (blockchain);
+
+CREATE INDEX idx_whale_tx_type ON public.whale_transactions (transaction_type);
+
+-- Enable Supabase Realtime on whale_transactions for live dashboard updates
+ALTER PUBLICATION supabase_realtime ADD TABLE public.whale_transactions;
 
 -- ============================================================
 -- 4. watchlist_items
@@ -168,13 +177,9 @@ CREATE OR REPLACE VIEW public.alerts_feed AS
 SELECT
     id::TEXT,
     'whale' AS source,
-    COALESCE(from_owner_type, 'Unknown') || ' → ' || COALESCE(to_owner_type, 'Unknown') AS actor,
+    COALESCE(from_owner, from_owner_type, 'Unknown') || ' → ' || COALESCE(to_owner, to_owner_type, 'Unknown') AS actor,
     symbol,
-    CASE
-      WHEN to_owner_type = 'exchange' THEN 'Exchange Deposit'
-      WHEN from_owner_type = 'exchange' THEN 'Exchange Withdrawal'
-      ELSE 'Transfer'
-    END AS action,
+    COALESCE(transaction_type, 'Transfer') AS action,
     '$' || TRIM(TO_CHAR(amount_usd, '999,999,999,999')) AS amount_display,
     timestamp AS event_time,
     CASE

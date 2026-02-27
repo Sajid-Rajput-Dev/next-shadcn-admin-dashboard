@@ -13,24 +13,37 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { formatTradeDate } from "@/lib/utils/format-date";
 
 export function TradesTable() {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
-  // FMP free plan only supports page 0
-  const page = 0;
+  const page = Number(searchParams.get("page") ?? "0") || 0;
   const filters = {
     ticker: searchParams.get("ticker") || undefined,
     politician: searchParams.get("politician") || undefined,
     party: searchParams.get("party") as any || undefined,
     transactionType: searchParams.get("type") as any || undefined,
+    chamber: searchParams.get("chamber") as any || undefined,
   };
 
   const { data, isLoading, isError } = useCongressTrades(filters, page);
 
   const trades = data?.data || [];
   const hasMore = data?.hasMore || false;
+  const planLimited = data?.planLimited || false;
+
+  const goToPage = (nextPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (nextPage <= 0) {
+      params.delete("page");
+    } else {
+      params.set("page", String(nextPage));
+    }
+    router.replace(`${pathname}?${params.toString()}`);
+  };
 
   if (isLoading) {
     return (
@@ -66,7 +79,9 @@ export function TradesTable() {
             {trades.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="h-24 text-center">
-                  No trades found.
+                  {planLimited
+                    ? "Additional pages are not available for this endpoint on the current FMP subscription."
+                    : "No trades found."}
                 </TableCell>
               </TableRow>
             ) : (
@@ -128,9 +143,33 @@ export function TradesTable() {
         </Table>
       </div>
 
-      <div className="flex items-center justify-center text-sm text-muted-foreground">
-        Showing {trades.length} most recent trades (FMP Free Plan)
+      <div className="flex items-center justify-between text-sm text-muted-foreground">
+        <span>Showing {trades.length} trades</span>
+        <span>Page {page + 1}</span>
       </div>
+
+      {(page > 0 || hasMore) && (
+        <div className="flex items-center justify-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => goToPage(page - 1)}
+            disabled={page === 0 || isLoading}
+          >
+            <ChevronLeft className="h-4 w-4 mr-1" />
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => goToPage(page + 1)}
+            disabled={!hasMore || isLoading}
+          >
+            Next
+            <ChevronRight className="h-4 w-4 ml-1" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
