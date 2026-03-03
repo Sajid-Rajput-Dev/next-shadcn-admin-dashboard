@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+
 import { useThemeStore } from "@/stores/theme-store";
 
 export function StockHeatmap() {
@@ -35,6 +36,6 @@ export function StockHeatmap() {
   }, [theme]);
 
   return (
-    <div className="h-[400px] w-full bg-secondary rounded-lg border border-border overflow-hidden" ref={containerRef} />
+    <div className="h-[400px] w-full overflow-hidden rounded-lg border border-border bg-secondary" ref={containerRef} />
   );
 }

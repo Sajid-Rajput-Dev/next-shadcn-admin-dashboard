@@ -13,8 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useAlertsFeed } from "@/hooks/use-alerts-feed";
-import { SEVERITY_COLORS } from "@/lib/utils/constants";
-import type { AlertItem, AlertSeverity } from "@/types/alert";
+import type { AlertSeverity } from "@/types/alert";
 
 // ── Severity accent helpers ─────────────────────────────────────
 
@@ -50,8 +49,8 @@ function KpiCard({
       <CardContent className="flex items-center gap-3 p-4">
         <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${accent}`}>{icon}</div>
         <div className="min-w-0">
-          <p className="text-2xl font-bold leading-none text-white">{value}</p>
-          <p className="mt-0.5 truncate text-xs text-muted-foreground">{label}</p>
+          <p className="font-bold text-2xl text-white leading-none">{value}</p>
+          <p className="mt-0.5 truncate text-muted-foreground text-xs">{label}</p>
         </div>
       </CardContent>
     </Card>
@@ -95,8 +94,8 @@ export default function AlertsPage() {
     <div className="flex flex-col gap-6 p-4 md:p-8">
       {/* ── Header ────────────────────────────────────────── */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Market Alerts</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="font-bold text-2xl tracking-tight">Market Alerts</h1>
+        <p className="text-muted-foreground text-sm">
           Real-time notifications on significant market movements and insider activity.
         </p>
       </div>
@@ -131,8 +130,8 @@ export default function AlertsPage() {
 
       {/* ── Alerts Table Card ─────────────────────────────── */}
       <Card className="border-white/5 bg-card/50">
-        <CardHeader className="flex flex-col gap-4 space-y-0 border-b border-white/5 p-4 md:flex-row md:items-center md:justify-between">
-          <CardTitle className="text-base font-semibold">
+        <CardHeader className="flex flex-col gap-4 space-y-0 border-white/5 border-b p-4 md:flex-row md:items-center md:justify-between">
+          <CardTitle className="font-semibold text-base">
             Recent Alerts
             {!isLoading && (
               <Badge variant="secondary" className="ml-2 tabular-nums">
@@ -143,7 +142,7 @@ export default function AlertsPage() {
 
           <div className="flex flex-wrap items-center gap-2">
             <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
+              <Search className="absolute top-2.5 left-2.5 h-3.5 w-3.5 text-muted-foreground" />
               <Input
                 placeholder="Search..."
                 value={search}
@@ -216,12 +215,12 @@ export default function AlertsPage() {
                 filteredAlerts.map((alert) => (
                   <TableRow
                     key={alert.id}
-                    className={`border-l-2 border-b border-white/5 transition-colors hover:bg-white/[0.02] ${SEVERITY_LEFT_BORDER[alert.severity]}`}
+                    className={`border-white/5 border-b border-l-2 transition-colors hover:bg-white/[0.02] ${SEVERITY_LEFT_BORDER[alert.severity]}`}
                   >
                     <TableCell>
                       <div className="flex items-center gap-2">
                         {SEVERITY_ICON[alert.severity]}
-                        <SeverityBadge severity={alert.severity} className="text-[10px] px-1.5 py-0" />
+                        <SeverityBadge severity={alert.severity} className="px-1.5 py-0 text-[10px]" />
                       </div>
                     </TableCell>
                     <TableCell className="font-medium text-white">{alert.actor}</TableCell>
@@ -233,13 +232,13 @@ export default function AlertsPage() {
                         {alert.symbol}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">{alert.amount_display}</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">{alert.amount_display}</TableCell>
                     <TableCell>
-                      <Badge variant="secondary" className="capitalize bg-white/5 text-muted-foreground">
+                      <Badge variant="secondary" className="bg-white/5 text-muted-foreground capitalize">
                         {alert.source}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-right text-xs text-muted-foreground">
+                    <TableCell className="text-right text-muted-foreground text-xs">
                       {formatDistanceToNow(new Date(alert.event_time), { addSuffix: true })}
                     </TableCell>
                   </TableRow>

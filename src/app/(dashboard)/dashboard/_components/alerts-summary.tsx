@@ -41,21 +41,21 @@ export function AlertsSummary() {
   const recent = data.slice(0, 4);
 
   return (
-    <Card className="bg-card/50 border-white/5 h-full flex flex-col">
-      <CardHeader className="flex flex-row items-center justify-between pb-2 shrink-0">
+    <Card className="flex h-full flex-col border-white/5 bg-card/50">
+      <CardHeader className="flex shrink-0 flex-row items-center justify-between pb-2">
         <div className="flex items-center gap-2">
           <Bell className="h-4 w-4 text-orange-400" />
-          <CardTitle className="text-sm font-semibold">Alerts Summary</CardTitle>
+          <CardTitle className="font-semibold text-sm">Alerts Summary</CardTitle>
         </div>
         <Link
           href="/dashboard/alerts"
-          className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1 transition-colors"
+          className="flex items-center gap-1 text-muted-foreground text-xs transition-colors hover:text-primary"
         >
           View all <ExternalLink className="h-3 w-3" />
         </Link>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col gap-3 pb-4">
+      <CardContent className="flex flex-1 flex-col gap-3 pb-4">
         {alerts.isLoading ? (
           <div className="space-y-2">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -99,12 +99,12 @@ export function AlertsSummary() {
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <div className="flex-1 grid grid-cols-2 gap-1.5">
+              <div className="grid flex-1 grid-cols-2 gap-1.5">
                 {severityCounts.map((s) => (
                   <div
                     key={s.key}
                     className={cn(
-                      "flex items-center justify-between px-2 py-1 rounded-md text-xs",
+                      "flex items-center justify-between rounded-md px-2 py-1 text-xs",
                       SEVERITY_COLORS[s.key as AlertSeverity].bg,
                       SEVERITY_COLORS[s.key as AlertSeverity].border,
                       "border",
@@ -119,8 +119,8 @@ export function AlertsSummary() {
 
             {/* Recent alerts */}
             <div className="space-y-1.5">
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Recent</p>
-              {recent.length === 0 && <p className="text-xs text-muted-foreground">No alerts yet</p>}
+              <p className="font-medium text-muted-foreground text-xs uppercase tracking-wider">Recent</p>
+              {recent.length === 0 && <p className="text-muted-foreground text-xs">No alerts yet</p>}
               {recent.map((alert) => {
                 const Icon = SEVERITY_ICON[alert.severity];
                 const colors = SEVERITY_COLORS[alert.severity];
@@ -128,25 +128,25 @@ export function AlertsSummary() {
                   <div
                     key={alert.id}
                     className={cn(
-                      "flex items-start gap-2 p-2 rounded-md border-l-2 bg-white/[0.02]",
+                      "flex items-start gap-2 rounded-md border-l-2 bg-white/[0.02] p-2",
                       alert.severity === "critical" && "border-l-red-500",
                       alert.severity === "high" && "border-l-orange-500",
                       alert.severity === "medium" && "border-l-yellow-500",
                       alert.severity === "low" && "border-l-green-500",
                     )}
                   >
-                    <Icon className={cn("h-3 w-3 mt-0.5 shrink-0", colors.text)} />
+                    <Icon className={cn("mt-0.5 h-3 w-3 shrink-0", colors.text)} />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-1">
-                        <span className="text-xs font-medium text-white truncate">{alert.symbol}</span>
+                        <span className="truncate font-medium text-white text-xs">{alert.symbol}</span>
                         <Badge
                           variant="outline"
-                          className={cn("px-1 py-0 text-[10px] shrink-0", colors.bg, colors.text, colors.border)}
+                          className={cn("shrink-0 px-1 py-0 text-[10px]", colors.bg, colors.text, colors.border)}
                         >
                           {alert.source}
                         </Badge>
                       </div>
-                      <p className="text-[10px] text-muted-foreground truncate">{alert.actor}</p>
+                      <p className="truncate text-[10px] text-muted-foreground">{alert.actor}</p>
                     </div>
                   </div>
                 );

@@ -1,5 +1,6 @@
-import { Badge, badgeVariants } from "@/components/ui/badge";
-import { type VariantProps } from "class-variance-authority";
+import type { VariantProps } from "class-variance-authority";
+
+import { Badge, type badgeVariants } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {}
@@ -12,7 +13,7 @@ interface PartyBadgeProps extends BadgeProps {
 export function PartyBadge({ party, className, ...props }: PartyBadgeProps) {
   const normalizedParty = party?.toLowerCase() || "";
   const variant = "secondary";
-  
+
   let styles = "bg-gray-500/10 text-gray-500 hover:bg-gray-500/20";
   if (normalizedParty.includes("democrat")) {
     styles = "bg-blue-500/10 text-blue-500 hover:bg-blue-500/20";
@@ -34,7 +35,7 @@ interface SeverityBadgeProps extends BadgeProps {
 
 export function SeverityBadge({ severity, className, ...props }: SeverityBadgeProps) {
   const normalizedSeverity = severity?.toLowerCase() || "low";
-  
+
   let styles = "bg-secondary text-secondary-foreground";
   if (normalizedSeverity === "critical") {
     styles = "bg-red-500 text-white hover:bg-red-600";
@@ -53,19 +54,19 @@ export function SeverityBadge({ severity, className, ...props }: SeverityBadgePr
 
 // Transaction Type Badge
 interface TransactionTypeBadgeProps extends BadgeProps {
-    type?: string;
+  type?: string;
 }
 
 export function TransactionTypeBadge({ type, className, ...props }: TransactionTypeBadgeProps) {
-    const isBuy = type?.toLowerCase().includes("buy") || type?.toLowerCase().includes("purchase");
-    
-    const styles = isBuy 
-        ? "bg-green-500/10 text-green-500 hover:bg-green-500/20"
-        : "bg-red-500/10 text-red-500 hover:bg-red-500/20";
+  const isBuy = type?.toLowerCase().includes("buy") || type?.toLowerCase().includes("purchase");
 
-    return (
-        <Badge variant={isBuy ? "default" : "secondary"} className={cn(styles, className)} {...props}>
-            {type || "Unknown"}
-        </Badge>
-    );    
+  const styles = isBuy
+    ? "bg-green-500/10 text-green-500 hover:bg-green-500/20"
+    : "bg-red-500/10 text-red-500 hover:bg-red-500/20";
+
+  return (
+    <Badge variant={isBuy ? "default" : "secondary"} className={cn(styles, className)} {...props}>
+      {type || "Unknown"}
+    </Badge>
+  );
 }

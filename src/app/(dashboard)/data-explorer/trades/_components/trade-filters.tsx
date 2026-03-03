@@ -1,11 +1,15 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
 import { useRouter, useSearchParams } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 import { Search, X } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 import { useDebounce } from "../../../../../hooks/use-debounce";
 
 export function TradeFilters() {
@@ -51,10 +55,10 @@ export function TradeFilters() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 mb-6 p-4 bg-secondary/50 rounded-lg border border-border/50">
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div className="mb-6 flex flex-col gap-4 rounded-lg border border-border/50 bg-secondary/50 p-4 md:flex-row">
+      <div className="grid flex-1 grid-cols-1 gap-4 md:grid-cols-4">
         <div className="relative">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute top-2.5 left-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search Ticker (e.g. NVDA)"
             value={ticker}
@@ -63,7 +67,7 @@ export function TradeFilters() {
           />
         </div>
         <div className="relative">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute top-2.5 left-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search Politician"
             value={politician}
@@ -82,7 +86,7 @@ export function TradeFilters() {
             <SelectItem value="Other">Other</SelectItem>
           </SelectContent>
         </Select>
-         <Select value={chamber} onValueChange={setChamber}>
+        <Select value={chamber} onValueChange={setChamber}>
           <SelectTrigger>
             <SelectValue placeholder="Chamber" />
           </SelectTrigger>
@@ -95,7 +99,7 @@ export function TradeFilters() {
       </div>
       {(ticker || politician || party !== "all" || chamber !== "both") && (
         <Button variant="ghost" onClick={clearFilters} className="px-3">
-          <X className="h-4 w-4 mr-2" />
+          <X className="mr-2 h-4 w-4" />
           Reset
         </Button>
       )}

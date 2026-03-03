@@ -1,10 +1,19 @@
 "use client";
 
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { usePathname } from "next/navigation";
 import React from "react";
+
+import { usePathname } from "next/navigation";
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -19,24 +28,30 @@ export function SiteHeader() {
   });
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2 border-b border-white/5 bg-black/50 px-4 backdrop-blur-md sticky top-0 z-10 transition-all duration-200">
+    <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-white/5 border-b bg-black/50 px-4 backdrop-blur-md transition-all duration-200">
       <SidebarTrigger className="-ml-1 hover:bg-white/10 hover:text-white" />
       <Separator orientation="vertical" className="mr-2 h-4 bg-white/10" />
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem className="hidden md:block">
-            <BreadcrumbLink href="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
+            <BreadcrumbLink
+              href="/dashboard"
+              className="font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
               Capitol <span className="text-gradient-primary">Alpha</span>
             </BreadcrumbLink>
           </BreadcrumbItem>
-          {breadcrumbs.length > 0 && <BreadcrumbSeparator className="hidden md:block text-muted-foreground/50" />}
-          {breadcrumbs.map((crumb, index) => (
+          {breadcrumbs.length > 0 && <BreadcrumbSeparator className="hidden text-muted-foreground/50 md:block" />}
+          {breadcrumbs.map((crumb, _index) => (
             <React.Fragment key={crumb.href}>
               <BreadcrumbItem>
                 {crumb.isLast ? (
                   <BreadcrumbPage className="font-medium text-foreground">{crumb.title}</BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink href={crumb.href} className="text-muted-foreground hover:text-primary transition-colors">
+                  <BreadcrumbLink
+                    href={crumb.href}
+                    className="text-muted-foreground transition-colors hover:text-primary"
+                  >
                     {crumb.title}
                   </BreadcrumbLink>
                 )}

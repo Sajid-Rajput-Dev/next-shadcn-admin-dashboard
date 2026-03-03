@@ -1,16 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
+
 import { AlertCircle } from "lucide-react";
 
-export default function Error({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
+import { Button } from "@/components/ui/button";
+
+export default function DashboardError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
     // Log the error to an error reporting service
     console.error(error);
@@ -22,8 +18,8 @@ export default function Error({
         <AlertCircle className="h-8 w-8" />
       </div>
       <div className="space-y-2">
-        <h2 className="text-2xl font-bold tracking-tight">Something went wrong!</h2>
-        <p className="text-muted-foreground max-w-[400px]">
+        <h2 className="font-bold text-2xl tracking-tight">Something went wrong!</h2>
+        <p className="max-w-[400px] text-muted-foreground">
           We encountered an error while loading this page. Please try again later.
         </p>
       </div>

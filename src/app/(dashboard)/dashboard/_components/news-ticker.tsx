@@ -35,23 +35,23 @@ export function NewsTicker() {
   const articles = news.data?.data ?? [];
 
   return (
-    <Card className="bg-card/50 border-white/5 h-full flex flex-col">
-      <CardHeader className="flex flex-row items-center justify-between pb-2 shrink-0">
+    <Card className="flex h-full flex-col border-white/5 bg-card/50">
+      <CardHeader className="flex shrink-0 flex-row items-center justify-between pb-2">
         <div className="flex items-center gap-2">
           <Newspaper className="h-4 w-4 text-yellow-400" />
-          <CardTitle className="text-sm font-semibold">
+          <CardTitle className="font-semibold text-sm">
             {market === "crypto" ? "Crypto News" : market === "stocks" ? "Stock News" : "Market News"}
           </CardTitle>
         </div>
         <Link
           href="/dashboard/news"
-          className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1 transition-colors"
+          className="flex items-center gap-1 text-muted-foreground text-xs transition-colors hover:text-primary"
         >
           All news <ExternalLink className="h-3 w-3" />
         </Link>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col gap-2 pb-4">
+      <CardContent className="flex flex-1 flex-col gap-2 pb-4">
         {news.isLoading ? (
           <div className="space-y-3">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -62,7 +62,7 @@ export function NewsTicker() {
             ))}
           </div>
         ) : articles.length === 0 ? (
-          <p className="text-xs text-muted-foreground">No news available</p>
+          <p className="text-muted-foreground text-xs">No news available</p>
         ) : (
           <div className="space-y-0">
             {articles.map((article, idx) => {
@@ -73,20 +73,20 @@ export function NewsTicker() {
                   href={article.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-start gap-2.5 py-2.5 border-b border-white/5 last:border-0 hover:bg-white/[0.02] -mx-2 px-2 rounded transition-colors"
+                  className="group -mx-2 flex items-start gap-2.5 rounded border-white/5 border-b px-2 py-2.5 transition-colors last:border-0 hover:bg-white/[0.02]"
                 >
                   {/* Sentiment dot */}
                   <Circle
                     className={cn(
-                      "h-2 w-2 mt-1 shrink-0 fill-current",
+                      "mt-1 h-2 w-2 shrink-0 fill-current",
                       sentiment ? SENTIMENT_COLORS[sentiment].replace("bg-", "text-") : "text-muted-foreground",
                     )}
                   />
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs text-white leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                    <p className="line-clamp-2 text-white text-xs leading-snug transition-colors group-hover:text-primary">
                       {article.title}
                     </p>
-                    <div className="flex items-center gap-2 mt-0.5">
+                    <div className="mt-0.5 flex items-center gap-2">
                       <span className="text-[10px] text-muted-foreground">{article.site}</span>
                       <span className="text-[10px] text-muted-foreground">{formatAge(article.publishedDate)}</span>
                       {sentiment && (

@@ -1,19 +1,14 @@
 "use client";
 
-import { useCongressTrades } from "@/hooks/use-congress-trades";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useCongressTrades } from "@/hooks/use-congress-trades";
 import { formatTradeDate } from "@/lib/utils/format-date";
 
 export function TradesTable() {
@@ -24,9 +19,9 @@ export function TradesTable() {
   const filters = {
     ticker: searchParams.get("ticker") || undefined,
     politician: searchParams.get("politician") || undefined,
-    party: searchParams.get("party") as any || undefined,
-    transactionType: searchParams.get("type") as any || undefined,
-    chamber: searchParams.get("chamber") as any || undefined,
+    party: (searchParams.get("party") as any) || undefined,
+    transactionType: (searchParams.get("type") as any) || undefined,
+    chamber: (searchParams.get("chamber") as any) || undefined,
   };
 
   const { data, isLoading, isError } = useCongressTrades(filters, page);
@@ -87,27 +82,34 @@ export function TradesTable() {
             ) : (
               trades.map((trade: any, i: number) => {
                 // Handle both FMP field names and DB field names
-                const name = trade.politician_name || `${trade.firstName || ''} ${trade.lastName || ''}`.trim() || 'Unknown';
-                const type = trade.transaction_type || trade.type || 'Unknown';
-                const ticker = trade.ticker || trade.symbol || 'N/A';
-                const amount = trade.amount_range || trade.amount || '';
-                const date = trade.disclosure_date || trade.disclosureDate || trade.dateRecieved || trade.publication_date;
-                const chamber = trade.politician_chamber || trade.chamber || '';
-                const party = trade.politician_party || trade.party || '';
-                const initials = name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase();
+                const name =
+                  trade.politician_name || `${trade.firstName || ""} ${trade.lastName || ""}`.trim() || "Unknown";
+                const type = trade.transaction_type || trade.type || "Unknown";
+                const ticker = trade.ticker || trade.symbol || "N/A";
+                const amount = trade.amount_range || trade.amount || "";
+                const date =
+                  trade.disclosure_date || trade.disclosureDate || trade.dateRecieved || trade.publication_date;
+                const chamber = trade.politician_chamber || trade.chamber || "";
+                const party = trade.politician_party || trade.party || "";
+                const initials = name
+                  .split(" ")
+                  .map((n: string) => n[0])
+                  .join("")
+                  .slice(0, 2)
+                  .toUpperCase();
 
                 return (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                         <Avatar className="h-8 w-8">
+                        <Avatar className="h-8 w-8">
                           <AvatarFallback>{initials}</AvatarFallback>
                         </Avatar>
                         <div>
                           <div className="font-medium text-sm">{name}</div>
                           {(party || chamber) && (
-                            <div className="text-xs text-muted-foreground">
-                              {[party, chamber].filter(Boolean).join(' • ')}
+                            <div className="text-muted-foreground text-xs">
+                              {[party, chamber].filter(Boolean).join(" • ")}
                             </div>
                           )}
                         </div>
@@ -120,7 +122,11 @@ export function TradesTable() {
                     </TableCell>
                     <TableCell>
                       <Badge
-                        variant={type?.toLowerCase().includes("buy") || type?.toLowerCase().includes("purchase") ? "default" : "secondary"}
+                        variant={
+                          type?.toLowerCase().includes("buy") || type?.toLowerCase().includes("purchase")
+                            ? "default"
+                            : "secondary"
+                        }
                         className={
                           type?.toLowerCase().includes("buy") || type?.toLowerCase().includes("purchase")
                             ? "bg-green-500/10 text-green-500 hover:bg-green-500/20"
@@ -131,10 +137,8 @@ export function TradesTable() {
                       </Badge>
                     </TableCell>
                     <TableCell>{amount}</TableCell>
-                    <TableCell>{date ? formatTradeDate(date) : '--'}</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">
-                      {chamber || '--'}
-                    </TableCell>
+                    <TableCell>{date ? formatTradeDate(date) : "--"}</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">{chamber || "--"}</TableCell>
                   </TableRow>
                 );
               })
@@ -143,30 +147,20 @@ export function TradesTable() {
         </Table>
       </div>
 
-      <div className="flex items-center justify-between text-sm text-muted-foreground">
+      <div className="flex items-center justify-between text-muted-foreground text-sm">
         <span>Showing {trades.length} trades</span>
         <span>Page {page + 1}</span>
       </div>
 
       {(page > 0 || hasMore) && (
         <div className="flex items-center justify-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => goToPage(page - 1)}
-            disabled={page === 0 || isLoading}
-          >
-            <ChevronLeft className="h-4 w-4 mr-1" />
+          <Button variant="outline" size="sm" onClick={() => goToPage(page - 1)} disabled={page === 0 || isLoading}>
+            <ChevronLeft className="mr-1 h-4 w-4" />
             Previous
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => goToPage(page + 1)}
-            disabled={!hasMore || isLoading}
-          >
+          <Button variant="outline" size="sm" onClick={() => goToPage(page + 1)} disabled={!hasMore || isLoading}>
             Next
-            <ChevronRight className="h-4 w-4 ml-1" />
+            <ChevronRight className="ml-1 h-4 w-4" />
           </Button>
         </div>
       )}

@@ -1,7 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
+
+import Link from "next/link";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, Eye, EyeOff, Loader2, Lock, Mail, User } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -10,9 +12,9 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { MotionWrapper } from "@/components/ui/motion-wrapper";
 import { createClient } from "@/lib/supabase/client";
 import { type SignupInput, signupSchema } from "@/lib/validations/auth";
-import { MotionWrapper } from "@/components/ui/motion-wrapper";
 
 function getRedirectUrl(): string {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
@@ -74,17 +76,17 @@ export default function SignupPage() {
           </div>
         </div>
         <div className="space-y-2">
-          <h1 className="font-bold text-2xl tracking-tight text-white">Check your inbox</h1>
+          <h1 className="font-bold text-2xl text-white tracking-tight">Check your inbox</h1>
           <p className="text-muted-foreground text-sm leading-relaxed">
-            We sent a confirmation link to{" "}
-            <span className="font-semibold text-white">{emailSent}</span>.
+            We sent a confirmation link to <span className="font-semibold text-white">{emailSent}</span>.
             <br />
             Click the link to activate your account.
           </p>
         </div>
-        <div className="rounded-lg border border-white/10 bg-white/5 p-4 text-xs text-muted-foreground">
+        <div className="rounded-lg border border-white/10 bg-white/5 p-4 text-muted-foreground text-xs">
           Didn&apos;t receive it? Check your spam folder or{" "}
           <button
+            type="button"
             className="text-primary underline-offset-4 hover:underline"
             onClick={() => setEmailSent(null)}
           >
@@ -106,10 +108,8 @@ export default function SignupPage() {
   return (
     <MotionWrapper className="space-y-6" duration={0.4}>
       <div className="space-y-2 text-center sm:text-left">
-        <h1 className="font-bold text-3xl tracking-tight text-white">Create an account</h1>
-        <p className="text-muted-foreground text-sm">
-          Join thousands of traders tracking smart money
-        </p>
+        <h1 className="font-bold text-3xl text-white tracking-tight">Create an account</h1>
+        <p className="text-muted-foreground text-sm">Join thousands of traders tracking smart money</p>
       </div>
 
       <Form {...form}>
@@ -121,13 +121,13 @@ export default function SignupPage() {
               <FormItem>
                 <FormLabel className="text-foreground/90">Full Name</FormLabel>
                 <div className="relative">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <User className="absolute top-3 left-3 h-4 w-4 text-muted-foreground" />
                   <FormControl>
                     <Input
                       placeholder="John Doe"
                       autoComplete="name"
                       disabled={isLoading}
-                      className="pl-9 bg-black/50 border-white/10 focus-visible:ring-primary/50 text-white placeholder:text-muted-foreground/50"
+                      className="border-white/10 bg-black/50 pl-9 text-white placeholder:text-muted-foreground/50 focus-visible:ring-primary/50"
                       {...field}
                     />
                   </FormControl>
@@ -143,14 +143,14 @@ export default function SignupPage() {
               <FormItem>
                 <FormLabel className="text-foreground/90">Email Address</FormLabel>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Mail className="absolute top-3 left-3 h-4 w-4 text-muted-foreground" />
                   <FormControl>
                     <Input
                       placeholder="name@example.com"
                       type="email"
                       autoComplete="email"
                       disabled={isLoading}
-                      className="pl-9 bg-black/50 border-white/10 focus-visible:ring-primary/50 text-white placeholder:text-muted-foreground/50"
+                      className="border-white/10 bg-black/50 pl-9 text-white placeholder:text-muted-foreground/50 focus-visible:ring-primary/50"
                       {...field}
                     />
                   </FormControl>
@@ -166,14 +166,14 @@ export default function SignupPage() {
               <FormItem>
                 <FormLabel className="text-foreground/90">Password</FormLabel>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Lock className="absolute top-3 left-3 h-4 w-4 text-muted-foreground" />
                   <FormControl>
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
                       autoComplete="new-password"
                       disabled={isLoading}
-                      className="pl-9 pr-10 bg-black/50 border-white/10 focus-visible:ring-primary/50 text-white placeholder:text-muted-foreground/50"
+                      className="border-white/10 bg-black/50 pr-10 pl-9 text-white placeholder:text-muted-foreground/50 focus-visible:ring-primary/50"
                       {...field}
                     />
                   </FormControl>
@@ -181,7 +181,7 @@ export default function SignupPage() {
                     type="button"
                     tabIndex={-1}
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-3 text-muted-foreground hover:text-white transition-colors"
+                    className="absolute top-3 right-3 text-muted-foreground transition-colors hover:text-white"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -197,14 +197,14 @@ export default function SignupPage() {
               <FormItem>
                 <FormLabel className="text-foreground/90">Confirm Password</FormLabel>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Lock className="absolute top-3 left-3 h-4 w-4 text-muted-foreground" />
                   <FormControl>
                     <Input
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="••••••••"
                       autoComplete="new-password"
                       disabled={isLoading}
-                      className="pl-9 pr-10 bg-black/50 border-white/10 focus-visible:ring-primary/50 text-white placeholder:text-muted-foreground/50"
+                      className="border-white/10 bg-black/50 pr-10 pl-9 text-white placeholder:text-muted-foreground/50 focus-visible:ring-primary/50"
                       {...field}
                     />
                   </FormControl>
@@ -212,7 +212,7 @@ export default function SignupPage() {
                     type="button"
                     tabIndex={-1}
                     onClick={() => setShowConfirmPassword((v) => !v)}
-                    className="absolute right-3 top-3 text-muted-foreground hover:text-white transition-colors"
+                    className="absolute top-3 right-3 text-muted-foreground transition-colors hover:text-white"
                   >
                     {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -222,7 +222,7 @@ export default function SignupPage() {
             )}
           />
           <Button
-            className="w-full mt-2 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 h-11 font-medium text-base transition-all hover:scale-[1.02]"
+            className="mt-2 h-11 w-full bg-primary font-medium text-base text-white shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] hover:bg-primary/90"
             type="submit"
             disabled={isLoading}
           >
@@ -238,9 +238,12 @@ export default function SignupPage() {
         </form>
       </Form>
 
-      <p className="text-center text-muted-foreground text-sm pt-2">
+      <p className="pt-2 text-center text-muted-foreground text-sm">
         Already have an account?{" "}
-        <Link href="/login" className="font-semibold text-primary underline-offset-4 hover:underline transition-colors hover:text-primary/80">
+        <Link
+          href="/login"
+          className="font-semibold text-primary underline-offset-4 transition-colors hover:text-primary/80 hover:underline"
+        >
           Sign in
         </Link>
       </p>

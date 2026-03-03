@@ -1,20 +1,21 @@
 "use client";
 
+import { useState } from "react";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Mail, Lock } from "lucide-react";
+import { Loader2, Lock, Mail } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { MotionWrapper } from "@/components/ui/motion-wrapper";
 import { createClient } from "@/lib/supabase/client";
 import { type LoginInput, loginSchema } from "@/lib/validations/auth";
-import { MotionWrapper } from "@/components/ui/motion-wrapper";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -55,10 +56,8 @@ export default function LoginPage() {
   return (
     <MotionWrapper className="space-y-6" duration={0.4}>
       <div className="space-y-2 text-center sm:text-left">
-        <h1 className="font-bold text-3xl tracking-tight text-white">Welcome back</h1>
-        <p className="text-muted-foreground text-sm">
-          Enter your credentials to access your dashboard
-        </p>
+        <h1 className="font-bold text-3xl text-white tracking-tight">Welcome back</h1>
+        <p className="text-muted-foreground text-sm">Enter your credentials to access your dashboard</p>
       </div>
 
       <Form {...form}>
@@ -70,17 +69,17 @@ export default function LoginPage() {
               <FormItem>
                 <FormLabel className="text-foreground/90">Email Address</FormLabel>
                 <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <FormControl>
+                  <Mail className="absolute top-3 left-3 h-4 w-4 text-muted-foreground" />
+                  <FormControl>
                     <Input
-                        placeholder="name@example.com"
-                        type="email"
-                        autoComplete="email"
-                        disabled={isLoading}
-                        className="pl-9 bg-black/50 border-white/10 focus-visible:ring-primary/50 text-white placeholder:text-muted-foreground/50"
-                        {...field}
+                      placeholder="name@example.com"
+                      type="email"
+                      autoComplete="email"
+                      disabled={isLoading}
+                      className="border-white/10 bg-black/50 pl-9 text-white placeholder:text-muted-foreground/50 focus-visible:ring-primary/50"
+                      {...field}
                     />
-                    </FormControl>
+                  </FormControl>
                 </div>
                 <FormMessage />
               </FormItem>
@@ -93,25 +92,25 @@ export default function LoginPage() {
               <FormItem>
                 <FormLabel className="text-foreground/90">Password</FormLabel>
                 <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <FormControl>
+                  <Lock className="absolute top-3 left-3 h-4 w-4 text-muted-foreground" />
+                  <FormControl>
                     <Input
-                        type="password"
-                        placeholder="••••••••"
-                        autoComplete="current-password"
-                        disabled={isLoading}
-                        className="pl-9 bg-black/50 border-white/10 focus-visible:ring-primary/50 text-white placeholder:text-muted-foreground/50"
-                        {...field}
+                      type="password"
+                      placeholder="••••••••"
+                      autoComplete="current-password"
+                      disabled={isLoading}
+                      className="border-white/10 bg-black/50 pl-9 text-white placeholder:text-muted-foreground/50 focus-visible:ring-primary/50"
+                      {...field}
                     />
-                    </FormControl>
+                  </FormControl>
                 </div>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button 
-            className="w-full bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 h-11 font-medium text-base transition-all hover:scale-[1.02]" 
-            type="submit" 
+          <Button
+            className="h-11 w-full bg-primary font-medium text-base text-white shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] hover:bg-primary/90"
+            type="submit"
             disabled={isLoading}
           >
             {isLoading ? (
@@ -126,9 +125,12 @@ export default function LoginPage() {
         </form>
       </Form>
 
-      <p className="text-center text-muted-foreground text-sm pt-2">
+      <p className="pt-2 text-center text-muted-foreground text-sm">
         Don&apos;t have an account?{" "}
-        <Link href="/signup" className="font-semibold text-primary underline-offset-4 hover:underline transition-colors hover:text-primary/80">
+        <Link
+          href="/signup"
+          className="font-semibold text-primary underline-offset-4 transition-colors hover:text-primary/80 hover:underline"
+        >
           Create account
         </Link>
       </p>

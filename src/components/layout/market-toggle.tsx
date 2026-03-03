@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useMarketStore } from "@/stores/market-store";
 import { cn } from "@/lib/utils";
+import { useMarketStore } from "@/stores/market-store";
 
 export function MarketToggle() {
   const { market, setMarket } = useMarketStore();
@@ -14,10 +14,10 @@ export function MarketToggle() {
         size="sm"
         onClick={() => setMarket("stocks")}
         className={cn(
-          "h-7 rounded-md px-3 text-xs font-medium transition-all",
+          "h-7 rounded-md px-3 font-medium text-xs transition-all",
           market === "stocks"
             ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:text-primary-foreground"
-            : "text-muted-foreground hover:bg-white/5 hover:text-white"
+            : "text-muted-foreground hover:bg-white/5 hover:text-white",
         )}
       >
         Stocks
@@ -26,11 +26,11 @@ export function MarketToggle() {
         variant="ghost"
         size="sm"
         onClick={() => setMarket("crypto")}
-         className={cn(
-          "h-7 rounded-md px-3 text-xs font-medium transition-all",
+        className={cn(
+          "h-7 rounded-md px-3 font-medium text-xs transition-all",
           market === "crypto"
             ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:text-primary-foreground"
-            : "text-muted-foreground hover:bg-white/5 hover:text-white"
+            : "text-muted-foreground hover:bg-white/5 hover:text-white",
         )}
       >
         Crypto
@@ -39,11 +39,11 @@ export function MarketToggle() {
         variant="ghost"
         size="sm"
         onClick={() => setMarket("all")}
-         className={cn(
-          "h-7 rounded-md px-3 text-xs font-medium transition-all",
+        className={cn(
+          "h-7 rounded-md px-3 font-medium text-xs transition-all",
           market === "all"
             ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:text-primary-foreground"
-            : "text-muted-foreground hover:bg-white/5 hover:text-white"
+            : "text-muted-foreground hover:bg-white/5 hover:text-white",
         )}
       >
         All

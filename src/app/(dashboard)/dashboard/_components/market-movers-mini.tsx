@@ -2,14 +2,16 @@
 
 import Link from "next/link";
 
-import { ExternalLink, TrendingUp } from "lucide-react";
+import { BookmarkCheck, BookmarkPlus, ExternalLink, TrendingUp } from "lucide-react";
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCryptoPrices } from "@/hooks/use-crypto-prices";
 import { useMarketMovers } from "@/hooks/use-market-movers";
+import { useWatchlist } from "@/hooks/use-watchlist";
 import { useMarketStore } from "@/stores/market-store";
 
 export function MarketMoversMini() {
@@ -19,6 +21,7 @@ export function MarketMoversMini() {
   const gainers = useMarketMovers("gainers");
   const losers = useMarketMovers("losers");
   const crypto = useCryptoPrices(1, 20);
+  const { isInWatchlist, addToWatchlist } = useWatchlist();
 
   const isLoading = isCrypto ? crypto.isLoading : gainers.isLoading || losers.isLoading;
 
@@ -30,6 +33,8 @@ export function MarketMoversMini() {
     symbol: c.symbol.toUpperCase(),
     pct: c.price_change_percentage_24h,
     price: c.current_price,
+    coinId: c.id,
+    name: c.name,
   }));
   const cryptoLosers = [...cryptoCoins]
     .reverse()
@@ -38,6 +43,8 @@ export function MarketMoversMini() {
       symbol: c.symbol.toUpperCase(),
       pct: c.price_change_percentage_24h,
       price: c.current_price,
+      coinId: c.id,
+      name: c.name,
     }));
 
   // Stock mode: from market movers API
@@ -45,11 +52,15 @@ export function MarketMoversMini() {
     symbol: m.symbol,
     pct: m.changesPercentage,
     price: m.price,
+    coinId: undefined as string | undefined,
+    name: m.name ?? m.symbol,
   }));
   const stockLosers = (losers.data?.data ?? []).slice(0, 5).map((m) => ({
     symbol: m.symbol,
     pct: m.changesPercentage,
     price: m.price,
+    coinId: undefined as string | undefined,
+    name: m.name ?? m.symbol,
   }));
 
   const topGainers = isCrypto ? cryptoGainers : stockGainers;
@@ -61,21 +72,21 @@ export function MarketMoversMini() {
   ].sort((a, b) => b.value - a.value);
 
   return (
-    <Card className="bg-card/50 border-white/5 h-full flex flex-col">
-      <CardHeader className="flex flex-row items-center justify-between pb-2 shrink-0">
+    <Card className="flex h-full flex-col border-white/5 bg-card/50">
+      <CardHeader className="flex shrink-0 flex-row items-center justify-between pb-2">
         <div className="flex items-center gap-2">
           <TrendingUp className="h-4 w-4 text-green-400" />
-          <CardTitle className="text-sm font-semibold">{isCrypto ? "Crypto Movers" : "Stock Movers"}</CardTitle>
+          <CardTitle className="font-semibold text-sm">{isCrypto ? "Crypto Movers" : "Stock Movers"}</CardTitle>
         </div>
         <Link
           href="/dashboard/market-movers"
-          className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1 transition-colors"
+          className="flex items-center gap-1 text-muted-foreground text-xs transition-colors hover:text-primary"
         >
           View all <ExternalLink className="h-3 w-3" />
         </Link>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col gap-4 pb-4">
+      <CardContent className="flex flex-1 flex-col gap-4 pb-4">
         {isLoading ? (
           <div className="space-y-2">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -130,40 +141,80 @@ export function MarketMoversMini() {
 
             {/* Top rows */}
             <div className="space-y-1.5">
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
+              <p className="font-medium text-muted-foreground text-xs uppercase tracking-wider">
                 Top 3 {isCrypto ? "Crypto" : "Stock"} Gainers
               </p>
-              {topGainers.slice(0, 3).map((g) => (
-                <div key={g.symbol} className="flex items-center justify-between text-xs">
-                  <span className="font-medium text-white">{g.symbol}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-muted-foreground">${g.price.toFixed(2)}</span>
-                    <Badge
-                      variant="outline"
-                      className="text-green-400 border-green-500/30 bg-green-500/10 px-1.5 py-0 text-xs"
-                    >
-                      +{g.pct.toFixed(2)}%
-                    </Badge>
+              {topGainers.slice(0, 3).map((g) => {
+                const assetType = isCrypto ? "crypto" : "stock";
+                const inList = isInWatchlist(g.symbol, assetType);
+                return (
+                  <div key={g.symbol} className="flex items-center justify-between text-xs">
+                    <span className="font-medium text-white">{g.symbol}</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-muted-foreground">${g.price.toFixed(2)}</span>
+                      <Badge
+                        variant="outline"
+                        className="border-green-500/30 bg-green-500/10 px-1.5 py-0 text-green-400 text-xs"
+                      >
+                        +{g.pct.toFixed(2)}%
+                      </Badge>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-5 w-5 p-0 hover:bg-white/10"
+                        title={inList ? "In watchlist" : "Add to watchlist"}
+                        onClick={() => {
+                          if (!inList)
+                            addToWatchlist({ ticker: g.symbol, asset_type: assetType, name: g.name, coinId: g.coinId });
+                        }}
+                      >
+                        {inList ? (
+                          <BookmarkCheck className="h-3 w-3 text-primary" />
+                        ) : (
+                          <BookmarkPlus className="h-3 w-3 text-muted-foreground" />
+                        )}
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              ))}
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider pt-1">
+                );
+              })}
+              <p className="pt-1 font-medium text-muted-foreground text-xs uppercase tracking-wider">
                 Top 3 {isCrypto ? "Crypto" : "Stock"} Losers
               </p>
-              {topLosers.slice(0, 3).map((l) => (
-                <div key={l.symbol} className="flex items-center justify-between text-xs">
-                  <span className="font-medium text-white">{l.symbol}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-muted-foreground">${l.price.toFixed(2)}</span>
-                    <Badge
-                      variant="outline"
-                      className="text-red-400 border-red-500/30 bg-red-500/10 px-1.5 py-0 text-xs"
-                    >
-                      {l.pct.toFixed(2)}%
-                    </Badge>
+              {topLosers.slice(0, 3).map((l) => {
+                const assetType = isCrypto ? "crypto" : "stock";
+                const inList = isInWatchlist(l.symbol, assetType);
+                return (
+                  <div key={l.symbol} className="flex items-center justify-between text-xs">
+                    <span className="font-medium text-white">{l.symbol}</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-muted-foreground">${l.price.toFixed(2)}</span>
+                      <Badge
+                        variant="outline"
+                        className="border-red-500/30 bg-red-500/10 px-1.5 py-0 text-red-400 text-xs"
+                      >
+                        {l.pct.toFixed(2)}%
+                      </Badge>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-5 w-5 p-0 hover:bg-white/10"
+                        title={inList ? "In watchlist" : "Add to watchlist"}
+                        onClick={() => {
+                          if (!inList)
+                            addToWatchlist({ ticker: l.symbol, asset_type: assetType, name: l.name, coinId: l.coinId });
+                        }}
+                      >
+                        {inList ? (
+                          <BookmarkCheck className="h-3 w-3 text-primary" />
+                        ) : (
+                          <BookmarkPlus className="h-3 w-3 text-muted-foreground" />
+                        )}
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </>
         )}

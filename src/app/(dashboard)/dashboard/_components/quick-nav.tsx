@@ -34,30 +34,30 @@ const NAV_ITEMS = [
 
 export function QuickNav() {
   return (
-    <Card className="bg-card/50 border-white/5">
+    <Card className="border-white/5 bg-card/50">
       <CardHeader className="pb-3">
         <div className="flex items-center gap-2">
           <LayoutDashboard className="h-4 w-4 text-primary" />
-          <CardTitle className="text-sm font-semibold">Quick Navigation</CardTitle>
+          <CardTitle className="font-semibold text-sm">Quick Navigation</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="pb-4">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-10 gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-10">
           {NAV_ITEMS.map(({ label, href, icon: Icon, color }) => (
             <Link
               key={href}
               href={href}
               className={cn(
-                "flex flex-col items-center gap-2 px-3 py-3 rounded-lg",
-                "bg-white/[0.02] border border-white/5",
-                "hover:bg-white/[0.05] hover:border-white/10",
-                "transition-all group text-center",
+                "flex flex-col items-center gap-2 rounded-lg px-3 py-3",
+                "border border-white/5 bg-white/[0.02]",
+                "hover:border-white/10 hover:bg-white/[0.05]",
+                "group text-center transition-all",
               )}
             >
-              <div className={cn("p-2 rounded-lg bg-white/5 group-hover:bg-white/10 transition-colors", color)}>
+              <div className={cn("rounded-lg bg-white/5 p-2 transition-colors group-hover:bg-white/10", color)}>
                 <Icon className="h-4 w-4" />
               </div>
-              <span className="text-[10px] text-muted-foreground group-hover:text-white transition-colors leading-tight">
+              <span className="text-[10px] text-muted-foreground leading-tight transition-colors group-hover:text-white">
                 {label}
               </span>
             </Link>

@@ -42,16 +42,16 @@ function KpiCard({
   iconClass?: string;
 }) {
   return (
-    <Card className="bg-card/50 border-white/5 hover:border-white/10 transition-colors">
+    <Card className="border-white/5 bg-card/50 transition-colors hover:border-white/10">
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <p className="text-xs text-muted-foreground truncate">{label}</p>
-            <p className="text-xl font-bold text-white mt-0.5 truncate">{value}</p>
+            <p className="truncate text-muted-foreground text-xs">{label}</p>
+            <p className="mt-0.5 truncate font-bold text-white text-xl">{value}</p>
             {sub && (
               <p
                 className={cn(
-                  "text-xs mt-0.5 flex items-center gap-0.5",
+                  "mt-0.5 flex items-center gap-0.5 text-xs",
                   trend === "up" && "text-green-400",
                   trend === "down" && "text-red-400",
                   trend === "neutral" && "text-muted-foreground",
@@ -64,7 +64,7 @@ function KpiCard({
               </p>
             )}
           </div>
-          <div className={cn("p-2 rounded-lg bg-white/5 shrink-0", iconClass)}>
+          <div className={cn("shrink-0 rounded-lg bg-white/5 p-2", iconClass)}>
             <Icon className="h-4 w-4" />
           </div>
         </div>
@@ -75,15 +75,15 @@ function KpiCard({
 
 function KpiSkeleton() {
   return (
-    <Card className="bg-card/50 border-white/5">
+    <Card className="border-white/5 bg-card/50">
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1">
-            <Skeleton className="h-3 w-24 mb-1" />
-            <Skeleton className="h-6 w-16 mb-1" />
+            <Skeleton className="mb-1 h-3 w-24" />
+            <Skeleton className="mb-1 h-6 w-16" />
             <Skeleton className="h-3 w-20" />
           </div>
-          <Skeleton className="h-8 w-8 rounded-lg shrink-0" />
+          <Skeleton className="h-8 w-8 shrink-0 rounded-lg" />
         </div>
       </CardContent>
     </Card>
@@ -166,7 +166,7 @@ export function MarketOverviewStrip() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
         {Array.from({ length: 6 }).map((_, i) => (
           <KpiSkeleton key={i} />
         ))}
@@ -175,7 +175,7 @@ export function MarketOverviewStrip() {
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
       <KpiCard
         label="Active Alerts"
         value={String(totalAlerts)}

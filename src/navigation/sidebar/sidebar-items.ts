@@ -6,7 +6,6 @@ import {
   Landmark,
   LayoutDashboard,
   type LucideIcon,
-  Search,
   Settings,
   Users,
 } from "lucide-react";

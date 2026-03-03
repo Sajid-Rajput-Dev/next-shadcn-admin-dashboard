@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 
-import { ExternalLink, Waves } from "lucide-react";
+import { BookmarkCheck, BookmarkPlus, ExternalLink, Waves } from "lucide-react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useWatchlist } from "@/hooks/use-watchlist";
 import { useWhaleTransactions } from "@/hooks/use-whale-transactions";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +23,7 @@ function formatUsd(val: number | null): string {
 
 export function WhaleTrackerMini() {
   const whale = useWhaleTransactions({ pageSize: 10 });
+  const { isInWatchlist, addToWatchlist } = useWatchlist();
   const data = whale.data?.data ?? [];
 
   // Build mini chart data from transactions (by timestamp buckets)
@@ -33,21 +36,21 @@ export function WhaleTrackerMini() {
   const recent = data.slice(0, 4);
 
   return (
-    <Card className="bg-card/50 border-white/5 h-full flex flex-col">
-      <CardHeader className="flex flex-row items-center justify-between pb-2 shrink-0">
+    <Card className="flex h-full flex-col border-white/5 bg-card/50">
+      <CardHeader className="flex shrink-0 flex-row items-center justify-between pb-2">
         <div className="flex items-center gap-2">
           <Waves className="h-4 w-4 text-blue-400" />
-          <CardTitle className="text-sm font-semibold">Whale Tracker</CardTitle>
+          <CardTitle className="font-semibold text-sm">Whale Tracker</CardTitle>
         </div>
         <Link
           href="/dashboard/data-explorer"
-          className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1 transition-colors"
+          className="flex items-center gap-1 text-muted-foreground text-xs transition-colors hover:text-primary"
         >
           Explore <ExternalLink className="h-3 w-3" />
         </Link>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col gap-3 pb-4">
+      <CardContent className="flex flex-1 flex-col gap-3 pb-4">
         {whale.isLoading ? (
           <div className="space-y-2">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -91,34 +94,52 @@ export function WhaleTrackerMini() {
 
             {/* Recent whale txns */}
             <div className="space-y-1.5">
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Recent Transactions</p>
-              {recent.length === 0 && <p className="text-xs text-muted-foreground">No transactions loaded</p>}
+              <p className="font-medium text-muted-foreground text-xs uppercase tracking-wider">Recent Transactions</p>
+              {recent.length === 0 && <p className="text-muted-foreground text-xs">No transactions loaded</p>}
               {recent.map((tx) => {
                 const isBuy =
                   tx.transaction_type?.toLowerCase().includes("transfer_to") || tx.to_owner_type === "exchange";
+                const inList = tx.symbol ? isInWatchlist(tx.symbol, "crypto") : false;
                 return (
                   <div
                     key={tx.id}
                     className={cn(
-                      "flex items-center gap-2 px-2 py-1.5 rounded-md bg-white/[0.02] border-l-2",
+                      "flex items-center gap-2 rounded-md border-l-2 bg-white/[0.02] px-2 py-1.5",
                       isBuy ? "border-l-green-500" : "border-l-blue-500",
                     )}
                   >
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-medium text-white">{tx.symbol}</span>
-                        <span className="text-xs font-semibold text-blue-400">{formatUsd(tx.amount_usd)}</span>
+                        <span className="font-medium text-white text-xs">{tx.symbol}</span>
+                        <span className="font-semibold text-blue-400 text-xs">{formatUsd(tx.amount_usd)}</span>
                       </div>
-                      <p className="text-[10px] text-muted-foreground truncate">
+                      <p className="truncate text-[10px] text-muted-foreground">
                         {tx.alert_text ?? `${tx.transaction_type} · ${tx.blockchain}`}
                       </p>
                     </div>
                     <Badge
                       variant="outline"
-                      className="text-[10px] px-1.5 py-0 border-white/10 text-muted-foreground shrink-0"
+                      className="shrink-0 border-white/10 px-1.5 py-0 text-[10px] text-muted-foreground"
                     >
                       {tx.blockchain?.toUpperCase().slice(0, 3)}
                     </Badge>
+                    {tx.symbol && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-5 w-5 shrink-0 p-0 hover:bg-white/10"
+                        title={inList ? "In watchlist" : "Add to watchlist"}
+                        onClick={() => {
+                          if (!inList) addToWatchlist({ ticker: tx.symbol!, asset_type: "crypto", name: tx.symbol! });
+                        }}
+                      >
+                        {inList ? (
+                          <BookmarkCheck className="h-3 w-3 text-primary" />
+                        ) : (
+                          <BookmarkPlus className="h-3 w-3 text-muted-foreground" />
+                        )}
+                      </Button>
+                    )}
                   </div>
                 );
               })}

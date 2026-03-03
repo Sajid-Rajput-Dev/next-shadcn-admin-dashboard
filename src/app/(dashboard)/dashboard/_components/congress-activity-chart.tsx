@@ -44,21 +44,21 @@ export function CongressActivityChart() {
   const recentTrades = data.slice(0, 4);
 
   return (
-    <Card className="bg-card/50 border-white/5 h-full flex flex-col">
-      <CardHeader className="flex flex-row items-center justify-between pb-2 shrink-0">
+    <Card className="flex h-full flex-col border-white/5 bg-card/50">
+      <CardHeader className="flex shrink-0 flex-row items-center justify-between pb-2">
         <div className="flex items-center gap-2">
           <Building2 className="h-4 w-4 text-blue-400" />
-          <CardTitle className="text-sm font-semibold">Congress Activity</CardTitle>
+          <CardTitle className="font-semibold text-sm">Congress Activity</CardTitle>
         </div>
         <Link
           href="/dashboard/data-explorer"
-          className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1 transition-colors"
+          className="flex items-center gap-1 text-muted-foreground text-xs transition-colors hover:text-primary"
         >
           Explore <ExternalLink className="h-3 w-3" />
         </Link>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col gap-3 pb-4">
+      <CardContent className="flex flex-1 flex-col gap-3 pb-4">
         {trades.isLoading ? (
           <div className="space-y-2">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -104,7 +104,7 @@ export function CongressActivityChart() {
 
             {/* Party counts */}
             {Object.keys(partyCounts).length > 0 && Object.keys(partyCounts)[0] !== "Unknown" && (
-              <div className="flex gap-2 flex-wrap">
+              <div className="flex flex-wrap gap-2">
                 {Object.entries(partyCounts).map(([party, count]) => {
                   const colors = PARTY_COLORS[party as keyof typeof PARTY_COLORS];
                   return colors ? (
@@ -122,26 +122,26 @@ export function CongressActivityChart() {
 
             {/* Recent trades */}
             <div className="space-y-1.5">
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Recent Trades</p>
-              {recentTrades.length === 0 && <p className="text-xs text-muted-foreground">No trades loaded</p>}
+              <p className="font-medium text-muted-foreground text-xs uppercase tracking-wider">Recent Trades</p>
+              {recentTrades.length === 0 && <p className="text-muted-foreground text-xs">No trades loaded</p>}
               {recentTrades.map((trade, idx) => {
                 const isSale = trade.type?.toLowerCase().includes("sale");
                 return (
                   <div
                     key={idx}
                     className={cn(
-                      "flex items-center justify-between gap-2 px-2 py-1.5 rounded-md bg-white/[0.02] border-l-2",
+                      "flex items-center justify-between gap-2 rounded-md border-l-2 bg-white/[0.02] px-2 py-1.5",
                       isSale ? "border-l-red-500" : "border-l-green-500",
                     )}
                   >
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-medium text-white truncate">{trade.symbol || trade.ticker || "—"}</p>
-                      <p className="text-[10px] text-muted-foreground truncate">
+                      <p className="truncate font-medium text-white text-xs">{trade.symbol || trade.ticker || "—"}</p>
+                      <p className="truncate text-[10px] text-muted-foreground">
                         {trade.representative ?? `${trade.firstName ?? ""} ${trade.lastName ?? ""}`.trim()}
                       </p>
                     </div>
-                    <div className="text-right shrink-0">
-                      <p className={cn("text-xs font-medium", isSale ? "text-red-400" : "text-green-400")}>
+                    <div className="shrink-0 text-right">
+                      <p className={cn("font-medium text-xs", isSale ? "text-red-400" : "text-green-400")}>
                         {trade.type ?? "—"}
                       </p>
                       <p className="text-[10px] text-muted-foreground">{trade.amount}</p>

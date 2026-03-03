@@ -20,11 +20,11 @@ export default async function DashboardPage() {
   return (
     <div className="flex flex-col gap-5 p-4 md:p-6">
       {/* ── Header ──────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Market Intelligence</h2>
-          <p className="text-sm text-muted-foreground">
-            Welcome back, <span className="text-white font-medium">{user?.email?.split("@")[0] || "Trader"}</span>.
+          <h2 className="font-bold text-2xl tracking-tight">Market Intelligence</h2>
+          <p className="text-muted-foreground text-sm">
+            Welcome back, <span className="font-medium text-white">{user?.email?.split("@")[0] || "Trader"}</span>.
             Here&apos;s your full briefing.
           </p>
         </div>
@@ -35,7 +35,7 @@ export default async function DashboardPage() {
       <MarketOverviewStrip />
 
       {/* ── Row 2: Movers + Alerts ──────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-7 gap-5">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-7">
         <div className="lg:col-span-4">
           <MarketMoversMini />
         </div>
@@ -45,9 +45,9 @@ export default async function DashboardPage() {
       </div>
 
       {/* ── Row 3: Heatmap + Congress ───────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-7 gap-5">
-        <div className="lg:col-span-4 flex flex-col gap-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-0.5">Sector Heatmap</p>
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-7">
+        <div className="flex flex-col gap-2 lg:col-span-4">
+          <p className="px-0.5 font-semibold text-muted-foreground text-xs uppercase tracking-wider">Sector Heatmap</p>
           <StockHeatmap />
         </div>
         <div className="lg:col-span-3">
@@ -56,7 +56,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* ── Row 4: News + Whale ─────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-7 gap-5">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-7">
         <div className="lg:col-span-4">
           <NewsTicker />
         </div>
@@ -66,7 +66,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* ── Row 5: Earnings + Quick Nav ─────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-7 gap-5">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-7">
         <div className="lg:col-span-4">
           <EarningsPreview />
         </div>

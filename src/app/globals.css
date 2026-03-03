@@ -57,54 +57,54 @@
   --radius: 0.625rem;
 
   /* Light Mode (Off-White & Dark Slate) */
-  --background: #F9FBFD;
+  --background: #f9fbfd;
   /* Off-White */
-  --foreground: #272E38;
+  --foreground: #272e38;
   /* Dark Slate Blue-Gray */
 
-  --card: #FFFFFF;
-  --card-foreground: #272E38;
+  --card: #ffffff;
+  --card-foreground: #272e38;
 
-  --popover: #FFFFFF;
-  --popover-foreground: #272E38;
+  --popover: #ffffff;
+  --popover-foreground: #272e38;
 
-  --primary: #1996D3;
+  --primary: #1996d3;
   /* Crypto Blue */
-  --primary-foreground: #FFFFFF;
+  --primary-foreground: #ffffff;
 
-  --secondary: #E2E8F0;
+  --secondary: #e2e8f0;
   /* Soft gray for secondary interactions */
-  --secondary-foreground: #272E38;
+  --secondary-foreground: #272e38;
 
-  --muted: #F1F5F9;
-  --muted-foreground: #696E78;
+  --muted: #f1f5f9;
+  --muted-foreground: #696e78;
   /* Cool Gray */
 
-  --accent: #1996D3;
-  --accent-foreground: #FFFFFF;
+  --accent: #1996d3;
+  --accent-foreground: #ffffff;
 
-  --destructive: #EF4444;
-  --destructive-foreground: #FFFFFF;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
 
-  --border: #B8C4CE;
+  --border: #b8c4ce;
   /* Light Blue-Gray */
-  --input: #B8C4CE;
-  --ring: #1996D3;
+  --input: #b8c4ce;
+  --ring: #1996d3;
 
-  --chart-1: #1996D3;
-  --chart-2: #272E38;
-  --chart-3: #B8C4CE;
-  --chart-4: #696E78;
+  --chart-1: #1996d3;
+  --chart-2: #272e38;
+  --chart-3: #b8c4ce;
+  --chart-4: #696e78;
   --chart-5: #000000;
 
-  --sidebar: #F9FBFD;
-  --sidebar-foreground: #272E38;
-  --sidebar-primary: #1996D3;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #E2E8F0;
-  --sidebar-accent-foreground: #272E38;
-  --sidebar-border: #B8C4CE;
-  --sidebar-ring: #1996D3;
+  --sidebar: #f9fbfd;
+  --sidebar-foreground: #272e38;
+  --sidebar-primary: #1996d3;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e2e8f0;
+  --sidebar-accent-foreground: #272e38;
+  --sidebar-border: #b8c4ce;
+  --sidebar-ring: #1996d3;
 
   /* fonts */
   --font-sans: var(--font-inter);
@@ -115,56 +115,56 @@
   /* Dark Mode (Pure Black & Off-White) */
   --background: #000000;
   /* Pure Black */
-  --foreground: #F9FBFD;
+  --foreground: #f9fbfd;
   /* Off-White */
 
-  --card: #0A0A0A;
+  --card: #0a0a0a;
   /* Slightly lighter for cards */
-  --card-foreground: #F9FBFD;
+  --card-foreground: #f9fbfd;
 
-  --popover: #0A0A0A;
-  --popover-foreground: #F9FBFD;
+  --popover: #0a0a0a;
+  --popover-foreground: #f9fbfd;
 
   /* Brand Blue Accent */
-  --primary: #1996D3;
+  --primary: #1996d3;
   /* Crypto Blue */
-  --primary-foreground: #FFFFFF;
+  --primary-foreground: #ffffff;
 
-  --secondary: #1A1A1A;
+  --secondary: #1a1a1a;
   /* Dark Gray for secondary */
-  --secondary-foreground: #F9FBFD;
+  --secondary-foreground: #f9fbfd;
 
-  --muted: #1A1A1A;
-  --muted-foreground: #696E78;
+  --muted: #1a1a1a;
+  --muted-foreground: #696e78;
   /* Cool Gray for muted text */
 
-  --accent: #1996D3;
-  --accent-foreground: #FFFFFF;
+  --accent: #1996d3;
+  --accent-foreground: #ffffff;
 
-  --destructive: #CF3333;
+  --destructive: #cf3333;
   /* Slightly dimmed red for dark mode */
 
   /* Subtle Borders */
-  --border: #1A1A1A;
-  --input: #1A1A1A;
-  --ring: #1996D3;
+  --border: #1a1a1a;
+  --input: #1a1a1a;
+  --ring: #1996d3;
 
   /* Chart colors: Blue, White, Gray, Dark Gray, Black */
-  --chart-1: #1996D3;
-  --chart-2: #F9FBFD;
-  --chart-3: #696E78;
-  --chart-4: #272E38;
-  --chart-5: #1A1A1A;
+  --chart-1: #1996d3;
+  --chart-2: #f9fbfd;
+  --chart-3: #696e78;
+  --chart-4: #272e38;
+  --chart-5: #1a1a1a;
 
   /* Dark Sidebar */
   --sidebar: #000000;
-  --sidebar-foreground: #F9FBFD;
-  --sidebar-primary: #1996D3;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #1A1A1A;
-  --sidebar-accent-foreground: #F9FBFD;
-  --sidebar-border: #1A1A1A;
-  --sidebar-ring: #1996D3;
+  --sidebar-foreground: #f9fbfd;
+  --sidebar-primary: #1996d3;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1a1a1a;
+  --sidebar-accent-foreground: #f9fbfd;
+  --sidebar-border: #1a1a1a;
+  --sidebar-ring: #1996d3;
 }
 
 @layer base {
@@ -291,7 +291,7 @@ html {
 }
 
 .animate-spotlight {
-  animation: spotlight 2s ease .75s 1 forwards;
+  animation: spotlight 2s ease 0.75s 1 forwards;
 }
 
 @keyframes scroll {
